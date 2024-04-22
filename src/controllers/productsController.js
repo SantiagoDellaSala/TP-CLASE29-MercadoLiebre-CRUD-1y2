@@ -33,7 +33,9 @@ const controller = {
   store: (req, res) => {
     const lastID = products[products.length - 1].id;
 
-	const {name, price, discount, category, description, image} = req.body
+    const { name, price, discount, category, description } = req.body;
+
+    const image = req.file.filename;
 
     const newProduct = {
       id: lastID + 1,
@@ -42,15 +44,15 @@ const controller = {
       discount: +discount,
       category: category,
       description: description.trim(),
-      image: 'default-image.png',
+      image: image,
     };
 
-	products.push(newProduct);
+    products.push(newProduct);
 
-	fs.writeFileSync(productsFilePath, JSON.stringify(products), 'utf-8');
+    fs.writeFileSync(productsFilePath, JSON.stringify(products), 'utf-8');
 
     return res.redirect('/products/detail/' + newProduct.id);
-  },
+},
 
   // Update - Form to edit
   edit: (req, res) => {
